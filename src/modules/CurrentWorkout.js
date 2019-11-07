@@ -1,15 +1,22 @@
 /*eslint-disable*/
 //@flow
-import React, {useContext} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import WorkoutComponent from '../components/WorkoutComponent/';
 import {RootStoreContext} from '../stores/RootStore';
 import {ScrollView} from 'react-native-gesture-handler';
+import {WorkoutTimerComponent} from '../components/WorkoutTimerComponent/WorkoutTimerComponent';
 type Props = {};
 
 export const CurrentWorkout = observer(({}: Props) => {
   const rootStore = useContext(RootStoreContext);
+
+  useEffect(() => {
+    return () => {
+      rootStore.workoutTimerStore.stopTimer();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -17,16 +24,17 @@ export const CurrentWorkout = observer(({}: Props) => {
         return (
           <WorkoutComponent
             onSetPress={setIndex => {
+              rootStore.workoutTimerStore.startTimer();
               const value = exc.sets[setIndex];
               let newValue: string;
               if (value === '') {
                 newValue = `${exc.reps}`;
               } else if (value === '0') {
+                rootStore.workoutTimerStore.stopTimer();
                 newValue = '';
               } else {
                 newValue = `${parseInt(value) - 1}`;
               }
-
               exc.sets[setIndex] = newValue;
             }}
             key={exc.exercise}
@@ -36,6 +44,13 @@ export const CurrentWorkout = observer(({}: Props) => {
           />
         );
       })}
+      {rootStore.workoutTimerStore.isRunning ? (
+        <WorkoutTimerComponent
+          percent={rootStore.workoutTimerStore.percent}
+          currentTime={rootStore.workoutTimerStore.display}
+          onClosePress={() => rootStore.workoutTimerStore.stopTimer()}
+        />
+      ) : null}
     </View>
   );
 });
