@@ -35,7 +35,7 @@ export const WorkoutHistory = observer(({}: Props) => {
               exercise: 'Deadlift',
               numSets: 1,
               reps: 5,
-              sets: ['5', 'x', 'x', 'x', 'x'],
+              sets: ['', 'x', 'x', 'x', 'x'],
               weight: 360,
             },
           );

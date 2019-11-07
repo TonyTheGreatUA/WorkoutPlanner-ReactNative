@@ -20,6 +20,7 @@ export const CurrentWorkout = observer(({}: Props) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}> Your workout for today: </Text>
       {rootStore.workoutStore.currentExcercises.map(exc => {
         return (
           <WorkoutComponent
@@ -59,5 +60,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  title: {
+    paddingTop: 10,
+    paddingRight: 100,
+    paddingBottom: 10,
+    color: '#FFF',
+    fontSize: 26,
+    fontWeight: 'bold',
+    fontFamily: 'arial',
   },
 });
